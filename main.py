@@ -1,15 +1,27 @@
 from bs4 import BeautifulSoup
 import requests
+from fake_useragent import UserAgent
 
 
-product = input('Что ищем? ')
-url = 'https://www.avito.ru/ekaterinburg?q=' + product
-print(url)
-request = requests.get(url)
+#Фейковый юзер агент
+ua = UserAgent()
+headers = {'User-Agent': ua.chrome}
 
-bs = BeautifulSoup(request.text, 'html.parser')
+#Запрос
+url = 'https://www.wildberries.ru/catalog/0/search.aspx?sort=popular&search=носки+женские'
+response = requests.get(url, headers=headers)
+print(response)
+#Какой headers передается
+for key, value in response.request.headers.items():
+    print(key+": "+value)
 
-all_links = bs.find_all('a', class_='title-root-zZCwT')
+#Текст из респонса
+bs = BeautifulSoup(response.text, 'html.parser')
+print(response.text)
+
+#Ищет ссылки в тексте респонса
+all_links = bs.find_all('a', class_='j-wba-footer-item')
 print(all_links)
 for link in all_links:
-    print('https://www.avito.ru' + link)
+    print(link['href'])
+

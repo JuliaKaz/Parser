@@ -1,27 +1,24 @@
 from bs4 import BeautifulSoup
 import requests
-from fake_useragent import UserAgent
+from requests import get
+import lxml
 
 
-#Фейковый юзер агент
-ua = UserAgent()
-headers = {'User-Agent': ua.chrome}
+# Получаем разметку
 
-#Запрос
-url = 'https://www.wildberries.ru/catalog/0/search.aspx?sort=popular&search=носки+женские'
-response = requests.get(url, headers=headers)
-print(response)
-#Какой headers передается
-for key, value in response.request.headers.items():
-    print(key+": "+value)
+url = 'https://mail.ru/'
+response = requests.get(url)
+soup = BeautifulSoup(response.text, 'lxml')
+quotes = soup.find_all('div', class_='news__list__item news__list__item_main')
+print(soup)
 
-#Текст из респонса
-bs = BeautifulSoup(response.text, 'html.parser')
-print(response.text)
+# Читаем заголовки новостей
 
-#Ищет ссылки в тексте респонса
-all_links = bs.find_all('a', class_='j-wba-footer-item')
-print(all_links)
-for link in all_links:
-    print(link['href'])
+for quote in quotes:
+    print(quote.text)
 
+
+# # Проверяем, какой headers передается
+# for key, value in response.request.headers.items():
+#     print(key+": "+value)
+#

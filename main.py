@@ -16,6 +16,13 @@ print(soup)
 
 for quote in quotes:
     print(quote.text)
+    
+
+# Получаем ссылки (все)
+
+links = [a.get('href') for a in soup.find_all('a')]
+for link in links:
+    print(link)
 
 
 # # Проверяем, какой headers передается
